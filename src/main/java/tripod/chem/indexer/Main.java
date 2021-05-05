@@ -15,15 +15,16 @@ public class Main {
     File index;
     String idField;
     boolean listSource;
+    boolean loadFromTCRD;
     List<File> files = new ArrayList<File>();
-    
+
     public Main (String[] argv) throws IOException {
         for (int i = 0; i < argv.length; ++i) {
             if (argv[i].charAt(0) == '-') {
                 switch (argv[i].charAt(1)) {
                 case 'h':
                     usage (System.err);
-                    
+
                 case 'i':
                     if (argv[i].length() > 2)
                         idField = argv[i].substring(2);
@@ -31,11 +32,15 @@ public class Main {
                         idField = argv[++i];
                     logger.info("Id Field: \""+idField+"\"");
                     break;
-                    
+
                 case 'l':
                     listSource = true;
                     break;
-                    
+
+                case 't':
+                    loadFromTCRD = true;
+                    break;
+
                 default:
                     logger.warning("Unknown option: "+argv[i]);
                 }
@@ -55,7 +60,7 @@ public class Main {
                 }
             }
         }
-        
+
         if (index == null) {
             logger.warning("No INDEX directory specified!");
             usage ();
@@ -73,10 +78,10 @@ public class Main {
                 }
                 System.out.println("** Total: "+indexer.size());
             }
-            
-            if (!files.isEmpty())
-                logger.info("Adding structures to index "+index+"...");
-            
+
+            if (!files.isEmpty() || loadFromTCRD)
+                logger.info("Adding structures to index " + index + "...");
+
             long start = System.currentTimeMillis(), total = 0;
             for (File f : files) {
                 MolImporter mi = new MolImporter (new FileInputStream (f));
@@ -108,7 +113,13 @@ public class Main {
                 total += count;
                 mi.close();
             }
-            
+
+            if(loadFromTCRD){
+                System.out.println("loading ligands from TCRD");
+                LoadFromTCRD loader = new LoadFromTCRD();
+                total += loader.fetchLigandsFromTCRD(indexer);
+            }
+
             if (total > 0) {
                 logger.info("Indexing time "+String.format
                             ("%1$.2fs",1e-3*(System.currentTimeMillis()-start))
@@ -119,11 +130,11 @@ public class Main {
             indexer.shutdown();
         }
     }
-    
+
     static void usage () {
         usage (System.err);
     }
-    
+
     static void usage (PrintStream ps) {
         ps.println("Usage: Main [OPTIONS] INDEX FILES...");
         ps.println("where INDEX is the index directory and OPTIONS can");
@@ -135,7 +146,7 @@ public class Main {
         ps.println("-l print all the source filenames that have been indexed");
         System.exit(1);
     }
-    
+
     public static void main (String[] argv) throws Exception {
         Main m = new Main (argv);
         m.exec();

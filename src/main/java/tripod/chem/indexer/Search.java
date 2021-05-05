@@ -113,7 +113,7 @@ public class Search {
                     break;
                     
                 default:
-                    logger.warning("Uknown option: "+argv[i]);
+                    logger.warning("Unknown option: "+argv[i]);
                 }
             }
             else if (index == null) {
