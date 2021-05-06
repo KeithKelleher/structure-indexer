@@ -6,6 +6,7 @@ import chemaxon.struc.Molecule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
@@ -14,6 +15,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 @SpringBootApplication
@@ -29,6 +32,7 @@ public class WebServices {
                 "<li>structure (required) - the URI encoded SMILES string of the compound</li>" +
                 "<li>type (optional, default = 'sim') - the type of search, either {sim}ilarity or {sub}structure</li>" +
                 "<li>t (optional, default = 0.8 for similarity search) - the cutoff for compound similarity</li>" +
+                "<li>format (optional, default = 'text') - either 'json' to get a json string, or anything else to get a tab delimted table</li>" +
                 "</ul>" +
                 "</div>" +
                 "<h1>Image Renderer</h1>" +
@@ -42,15 +46,16 @@ public class WebServices {
                 "</div>";
     }
 
-
     @GetMapping("/search")
-    public String findSimilarStructures(@RequestParam Map<String, String> queryParams) throws Exception {
+    public Object findSimilarStructures(@RequestParam Map<String, String> queryParams) throws Exception {
         String structure = queryParams.get("structure");
         if (structure == null) {
             return null;
         }
         String method = coalesce(queryParams.get("type"), "sim");
         String cutoff = coalesce(queryParams.get("t"), "0.8");
+        String format = coalesce(queryParams.get("format"), "text");
+
         Search s = new Search(new String[]{"idx", "-t", cutoff, "-s", method, structure});
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -60,6 +65,20 @@ public class WebServices {
         }
         String data = baos.toString(utf8);
 
+        if(format.equals("json")) {
+            String[] lines = data.split("\n");
+            String[] fields = cleanFields(lines[0].split("\t"));
+            ArrayList compounds = new ArrayList<HashMap<String,String>>();
+            for(Integer i = 1 ; i < lines.length ; i++){
+                HashMap<String, String> c = new HashMap<String, String>();
+                compounds.add(c);
+                String[] values = lines[i].split("\t");
+                for(Integer j = 0 ; j < fields.length ; j++){
+                    c.put(fields[j], values[j]);
+                }
+            }
+            return ResponseEntity.ok(compounds);
+        }
         return "<pre>" + data + "</pre>";
     }
 
@@ -86,5 +105,16 @@ public class WebServices {
     private static <T> T coalesce(T... items) {
         for (T i : items) if (i != null) return i;
         return null;
+    }
+
+    private static String cleanField(String name) {
+        return name.replace("#", "").toLowerCase();
+    }
+    private static String[] cleanFields(String[] names) {
+        String[] out = new String[names.length];
+        for(Integer i = 0 ; i < names.length ; i++){
+            out[i] = cleanField(names[i]);
+        }
+        return out;
     }
 }
