@@ -7,6 +7,12 @@
     <version>0.0.4</version>
     <name>structure-indexer</name>
     <url>http://maven.apache.org</url>
+    <repositories>
+        <repository>
+            <id>mvnrepository</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+    </repositories>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -31,6 +37,17 @@
         </plugins>
     </build>
     <dependencies>
+        <dependency>
+            <groupId>gov.nih.ncats</groupId>
+            <artifactId>molwitch-renderer</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>gov.nih.ncats</groupId>
+            <artifactId>molwitch-cdk</artifactId>
+            <version>1.0.3</version>
+        </dependency>
         <dependency>
             <groupId>chemaxon</groupId>
             <artifactId>jchem</artifactId>
