@@ -32,7 +32,7 @@ public class WebServices {
                 "<li>structure (required) - the URI encoded SMILES string of the compound</li>" +
                 "<li>type (optional, default = 'sim') - the type of search, either {sim}ilarity or {sub}structure</li>" +
                 "<li>t (optional, default = 0.8 for similarity search) - the cutoff for compound similarity</li>" +
-                "<li>format (optional, default = 'text') - either 'json' to get a json string, or anything else to get a tab delimted table</li>" +
+                "<li>format (optional, default = 'text') - either 'json' to get a json string, or anything else to get a tab delimited table</li>" +
                 "</ul>" +
                 "</div>" +
                 "<h1>Image Renderer</h1>" +
