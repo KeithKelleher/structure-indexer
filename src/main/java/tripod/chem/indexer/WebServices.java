@@ -26,7 +26,7 @@ public class WebServices {
                 "<div>URL: '/search'</div>" +
                 "<div>" +
                 "Arguments<ul>" +
-                "<li>smiles (required) - the URI encoded SMILES string of the compound</li>" +
+                "<li>structure (required) - the URI encoded SMILES string of the compound</li>" +
                 "<li>type (optional, default = 'sim') - the type of search, either {sim}ilarity or {sub}structure</li>" +
                 "<li>t (optional, default = 0.8 for similarity search) - the cutoff for compound similarity</li>" +
                 "</ul>" +
@@ -45,13 +45,13 @@ public class WebServices {
 
     @GetMapping("/search")
     public String findSimilarStructures(@RequestParam Map<String, String> queryParams) throws Exception {
-        String smiles = queryParams.get("smiles");
-        if (smiles == null) {
+        String structure = queryParams.get("structure");
+        if (structure == null) {
             return null;
         }
         String method = coalesce(queryParams.get("type"), "sim");
         String cutoff = coalesce(queryParams.get("t"), "0.8");
-        Search s = new Search(new String[]{"idx", "-t", cutoff, "-s", method, smiles});
+        Search s = new Search(new String[]{"idx", "-t", cutoff, "-s", method, structure});
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final String utf8 = StandardCharsets.UTF_8.name();
