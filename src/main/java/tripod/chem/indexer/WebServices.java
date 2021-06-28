@@ -93,7 +93,7 @@ public class WebServices {
 
         response.setContentType(MediaType.IMAGE_PNG_VALUE);
         MolExporter exporter = new MolExporter(response.getOutputStream(),
-                "png:w" + size + ",h" + size);
+                "pngx:w" + size + ",h" + size);
         exporter.write(m);
         exporter.close();
     }
