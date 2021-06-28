@@ -88,12 +88,13 @@ public class WebServices {
         if (structure == null) {
             return;
         }
+
         String size = coalesce(queryParams.get("size"), "400");
         Molecule m = MolImporter.importMol(structure);
 
         response.setContentType(MediaType.IMAGE_PNG_VALUE);
         MolExporter exporter = new MolExporter(response.getOutputStream(),
-                "pngx:w" + size + ",h" + size);
+                "png:-a,w" + size);
         exporter.write(m);
         exporter.close();
     }
