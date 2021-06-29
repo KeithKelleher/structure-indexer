@@ -1,4 +1,4 @@
 #!/bin/sh
-
+cd /home/ec2-user/structure-indexer
 LIBS=`mvn dependency:build-classpath | grep -v "[INFO]"`
 java -cp "$LIBS":target/classes tripod.chem.indexer.WebServices $*

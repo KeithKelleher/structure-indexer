@@ -90,11 +90,15 @@ public class WebServices {
         }
 
         String size = coalesce(queryParams.get("size"), "400");
+	String extra = queryParams.get("extra");
+	String imageOptions = "svg:-a,w" + size;
+	if (extra != null) {
+		imageOptions = imageOptions + "," + extra;
+	}
         Molecule m = MolImporter.importMol(structure);
 
         response.setContentType("image/svg+xml");
-        MolExporter exporter = new MolExporter(response.getOutputStream(),
-                "svg:-a,w" + size);
+        MolExporter exporter = new MolExporter(response.getOutputStream(), imageOptions);
         exporter.write(m);
         exporter.close();
     }
