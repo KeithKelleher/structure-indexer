@@ -92,9 +92,9 @@ public class WebServices {
         String size = coalesce(queryParams.get("size"), "400");
         Molecule m = MolImporter.importMol(structure);
 
-        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+        response.setContentType("image/svg+xml");
         MolExporter exporter = new MolExporter(response.getOutputStream(),
-                "png:-a,w" + size);
+                "svg:-a,w" + size);
         exporter.write(m);
         exporter.close();
     }

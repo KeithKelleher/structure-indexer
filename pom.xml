@@ -18,7 +18,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <build>
-        <plugins>
+	<plugins>
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>appengine-maven-plugin</artifactId>
@@ -31,6 +31,27 @@
         </plugins>
     </build>
     <dependencies>
+<dependency>
+  <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+  <artifactId>org.apache.batik.util</artifactId>
+  <version>1.6.0</version>
+</dependency>
+<dependency>
+  <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+  <artifactId>org.apache.batik.ext.awt</artifactId>
+  <version>1.6.0</version>
+</dependency>
+<dependency>
+  <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+  <artifactId>org.apache.batik.svggen</artifactId>
+  <version>1.6.0</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-dom -->
+<dependency>
+    <groupId>org.apache.xmlgraphics</groupId>
+    <artifactId>batik-dom</artifactId>
+    <version>1.14</version>
+</dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
