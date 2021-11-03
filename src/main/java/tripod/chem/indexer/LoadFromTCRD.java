@@ -26,8 +26,8 @@ public class LoadFromTCRD {
              ResultSet rs = st.executeQuery(query)) {
 
             while (rs.next()) {
-                String id = rs.getString(1);
-                String smiles = rs.getString(2);
+                String id = rs.getString(1).trim();
+                String smiles = rs.getString(2).trim();
                 Molecule m = MolImporter.importMol(smiles);
                 indexer.add("TCRD", id, m);
                 count++;
