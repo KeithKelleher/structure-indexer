@@ -13,12 +13,12 @@ public class LoadFromTCRD {
 
     public Integer fetchLigandsFromTCRD(StructureIndexer indexer) throws ClassNotFoundException {
 
-        String url = "jdbc:mysql://tcrd.ncats.io/tcrd6110?useSSL=false";
+        String url = "jdbc:mysql://tcrd.ncats.io/tcrd6124?useSSL=false";
         String user = "tcrd";
         String password = "";
         Integer count = 0;
 
-        String query = "SELECT id, smiles from ncats_ligands where smiles is not null";
+        String query = "SELECT identifier, smiles from ncats_ligands where smiles is not null";
 
         Class.forName("com.mysql.jdbc.Driver");
         try (Connection con = DriverManager.getConnection(url, user, password);
